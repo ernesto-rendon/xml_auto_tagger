@@ -42,44 +42,53 @@ def file_writer(old_file, old_location, old_county, file_month, file_day, file_y
 
 
     # Open existing XML file in READ mode
-    old_file_object = open(old_file, "r")
+    # old_file_object = open(old_file, "r")
     # Priming read for first line in existing XML file
-    old_file_line = old_file_object.readline()
-
-    # While current line is NOT empty
-    while old_file_line != '':
+    # old_file_line = old_file_object.readline()
     
-    	# DECEMBER UPDATE; removing username and password portion of XML files by ignoring input and not writing to new file
-    	if (old_file_line == '  <username>gulfcoast</username>\n') or (old_file_line == '  <password>legals</password>\n') or (old_file_line == '  <username>ObserverMediaGroup</username>\n'):
-    		old_file_line = old_file_object.readline()
-            continue
+    new_file_object.write("<xml>\n")
+    new_file_object.write("  <notice>\n")
+    new_file_object.write("    <subcategory_id>17</subcategory_id>\n")
+    new_file_object.write("    <date>" + file_month + "/" + file_day + "/" + file_year + "</date>\n")
+    new_file_object.write("    <text>Business Observer - " + old_county + " " + file_month + "/" + file_day + "/" + file_year + "</text>\n")
+    new_file_object.write("    <image>" + file_year + "-" + file_month + "-" + file_day + "-" + old_county + ".pdf</image>\n")
+    new_file_object.write('</notice>\n')
+    new_file_object.write("</xml>\n")
+
+    # # While current line is NOT empty
+    # while old_file_line != '':
+    
+    # 	# DECEMBER UPDATE; removing username and password portion of XML files by ignoring input and not writing to new file
+    # 	if (old_file_line == '  <username>gulfcoast</username>\n') or (old_file_line == '  <password>legals</password>\n') or (old_file_line == '  <username>ObserverMediaGroup</username>\n'):
+    # 		old_file_line = old_file_object.readline()
+    #         continue
     		
-        # Copy info to NEW XML file, line by line
-        new_file_object.write(old_file_line)
+    #     # Copy info to NEW XML file, line by line
+    #     new_file_object.write(old_file_line)
         	
-        if old_file_line == '  </notice>\n':
+    #     if old_file_line == '  </notice>\n':
 
-            # This bit checks if this is the last notice tag, a/k/a proper place to put XML tag for FPN
-            # If it is the right place, write down custom XML tags in newly opened file
-            # This should only trigger at the end of the XML file that was passed in
-            old_file_line = old_file_object.readline()
-            if old_file_line == '</xml>\n':
-                new_file_object.write("  <notice>\n")
-                new_file_object.write("    <subcategory_id>17</subcategory_id>\n")
-                new_file_object.write("    <date>" + file_month + "/" + file_day + "/" + file_year + "</date>\n")
-                new_file_object.write("    <text>Business Observer - " + old_county + " " + file_month + "/" + file_day + "/" + file_year + "</text>\n")
-                new_file_object.write("    <image>" + file_year + "-" + file_month + "-" + file_day + "-" + old_county + ".pdf</image>\n")
-                new_file_object.write('</notice>\n')
-                new_file_object.write("</xml>\n")
+    #         # This bit checks if this is the last notice tag, a/k/a proper place to put XML tag for FPN
+    #         # If it is the right place, write down custom XML tags in newly opened file
+    #         # This should only trigger at the end of the XML file that was passed in
+    #         old_file_line = old_file_object.readline()
+    #         if old_file_line == '</xml>\n':
+    #             new_file_object.write("  <notice>\n")
+    #             new_file_object.write("    <subcategory_id>17</subcategory_id>\n")
+    #             new_file_object.write("    <date>" + file_month + "/" + file_day + "/" + file_year + "</date>\n")
+    #             new_file_object.write("    <text>Business Observer - " + old_county + " " + file_month + "/" + file_day + "/" + file_year + "</text>\n")
+    #             new_file_object.write("    <image>" + file_year + "-" + file_month + "-" + file_day + "-" + old_county + ".pdf</image>\n")
+    #             new_file_object.write('</notice>\n')
+    #             new_file_object.write("</xml>\n")
 
 
-            # Otherwise, it's not the end yet, continue writing from old file to new
-            else:
-                continue
-        # Move from current line to next line
-        old_file_line = old_file_object.readline()
+    #         # Otherwise, it's not the end yet, continue writing from old file to new
+    #         else:
+    #             continue
+    #     # Move from current line to next line
+    #     old_file_line = old_file_object.readline()
     
-    old_file_object.close()
+    # old_file_object.close()
     new_file_object.close()
     
     # Confirm to user 
@@ -127,8 +136,6 @@ def main():
     else:
         print("Unknown error...")
         exit()    
-
-    #uh oh STINKY paradigm...
 
     # Calling function that will start checking files against matches
     file_checker(user_directory["live_directory"])
