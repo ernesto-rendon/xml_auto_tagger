@@ -52,7 +52,7 @@ def file_writer(old_file, old_location, old_county, file_month, file_day, file_y
     	# DECEMBER UPDATE; removing username and password portion of XML files by ignoring input and not writing to new file
     	if (old_file_line == '  <username>gulfcoast</username>\n') or (old_file_line == '  <password>legals</password>\n') or (old_file_line == '  <username>ObserverMediaGroup</username>\n'):
     		old_file_line = old_file_object.readline()
-    		continue
+            continue
     		
         # Copy info to NEW XML file, line by line
         new_file_object.write(old_file_line)
@@ -127,6 +127,8 @@ def main():
     else:
         print("Unknown error...")
         exit()    
+
+    #uh oh STINKY paradigm...
 
     # Calling function that will start checking files against matches
     file_checker(user_directory["live_directory"])
