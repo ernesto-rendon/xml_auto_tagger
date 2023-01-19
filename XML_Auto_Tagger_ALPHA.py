@@ -1,9 +1,5 @@
 # Ernesto Rendon
 # June 20, 2022 10:35:01 PM
-# Updated January 19, 2023 
-
-# DECEMBER UPDATE: Script now removes Username and Password portion of the files as per new 
-# standards for FTP Uploading
 
 # Program compares all filenames in any directory & subdirectories against
 # list of potential matches. If a match hits, it rewrites the file to a new,
