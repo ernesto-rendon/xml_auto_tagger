@@ -1,6 +1,6 @@
 # Ernesto Rendon
 # June 20, 2022 10:35:01 PM
-# Updated December 27, 2022 12:14:02 PM
+# Updated January 19, 2023 
 
 # DECEMBER UPDATE: Script now removes Username and Password portion of the files as per new 
 # standards for FTP Uploading
