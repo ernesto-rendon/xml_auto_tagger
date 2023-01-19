@@ -2,13 +2,12 @@
 # June 20, 2022 10:35:01 PM
 
 # Program compares all filenames in any directory & subdirectories against
-# list of potential matches. If a match hits, it rewrites the file to a new,
-# appropriately named .xml file, and adds appropriate XML tag to the appropriate
-# location within it all saved to path of original matched file. 
-# Original .xml files will be left alone. 
+# list of potential matches. If a match hits, it renames the XML to a new,
+# appropriately named file. Then, it creates a directory in the root of the dir 
+# passed in by the user; within this new directory, a new XML file is created with 
+# the same name as the aforementioned & respective file, but the only notice object is the corresponding PDF file
 
-
-# These libraries import...necessary functions?
+# These libraries import necessary functions
 import os
 import sys
 
@@ -26,21 +25,15 @@ county_filenames = (
 "Longboat.xml", "East County.xml"
 )
 
-# This function will handle writing of new XML file in match's directory
+# This function will handle writing of new XML file in the new directory
 # Will require the PATH, NAME of matching XML file, month, day and year
 def file_writer(old_file, new_location, old_county, file_month, file_day, file_year):
     
     new_file_ALPHA = os.path.join(new_location, "fpn_upload_" + county_codes[old_county] + "." + file_year + file_month + file_day + ".xml")
 
 
-    # # Create new file with county code that matches name via dictionary lookup
+    # Create new file with county code that matches name via dictionary lookup
     new_file_object = open(new_file_ALPHA, "w")
-
-
-    # Open existing XML file in READ mode
-    # old_file_object = open(old_file, "r")
-    # Priming read for first line in existing XML file
-    # old_file_line = old_file_object.readline()
     
     new_file_object.write("<xml>\n")
     new_file_object.write("  <notice>\n")
