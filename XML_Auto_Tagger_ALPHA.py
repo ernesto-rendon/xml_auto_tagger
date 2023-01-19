@@ -32,14 +32,20 @@ county_filenames = (
 
 # This function will handle writing of new XML file in match's directory
 # Will require the PATH, NAME of matching XML file, month, day and year
-def file_writer(old_file, old_location, old_county, file_month, file_day, file_year):
+def file_writer(old_file, new_location, old_county, file_month, file_day, file_year):
     
-    new_file_ALPHA = os.path.join(old_location, "fpn_upload_" + county_codes[old_county] + "." + file_year + file_month + file_day + ".xml")
+    new_file_ALPHA = os.path.join(new_location, "fpn_upload_" + county_codes[old_county] + "." + file_year + file_month + file_day + ".xml")
+
 
     # # Create new file with county code that matches name via dictionary lookup
     new_file_object = open(new_file_ALPHA, "w")
 
-    # Writing ONLY the layout tag in it's own self-contained XML file (with correct naming convention)
+
+    # Open existing XML file in READ mode
+    # old_file_object = open(old_file, "r")
+    # Priming read for first line in existing XML file
+    # old_file_line = old_file_object.readline()
+    
     new_file_object.write("<xml>\n")
     new_file_object.write("  <notice>\n")
     new_file_object.write("    <subcategory_id>17</subcategory_id>\n")
@@ -49,6 +55,7 @@ def file_writer(old_file, old_location, old_county, file_month, file_day, file_y
     new_file_object.write('</notice>\n')
     new_file_object.write("</xml>\n")
     
+    # old_file_object.close()
     new_file_object.close()
     
     # Confirm to user 
@@ -72,7 +79,19 @@ def file_checker(user_directory):
                     old_XML = os.path.join(root, county_files)
                     old_location = old_XML.rstrip(county_files)
                     old_county = county_files.rstrip(".xml")
-                    file_writer(old_XML, old_location, old_county, file_month, file_day, file_year)
+                    
+                    # Creates new directory at the root-level of user-provided folder 
+                    tag_dest_folder = os.path.join(user_directory,"layouts")
+                    if not os.path.exists(tag_dest_folder):
+                    	os.mkdir(tag_dest_folder)
+                    
+                    # Function will create new XML file with ONLY the layout tag, and place it within the newly created directory
+                    file_writer(old_XML, tag_dest_folder, old_county, file_month, file_day, file_year)
+                    
+                    # Renames the matched, extant XML file (containing individual notices) to proper encoding and leaves it in place
+                    renamed_notice_XMLs = "fpn_upload_" + county_codes[old_county] + "." + file_year + file_month + file_day + ".xml"
+                    final_name = os.path.join(old_location, renamed_notice_XMLs)
+                    os.rename(old_XML, final_name)
   
 # If number of command line arguments is less than or greater than 2, program will quit. 
 # Only 1 user-provided CLI argument is necessary for program
