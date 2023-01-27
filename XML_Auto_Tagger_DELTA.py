@@ -88,7 +88,7 @@ def file_writer(old_file, old_location, old_county, file_month, file_day, file_y
     new_file_object.close()
     
     # Confirm to user 
-    print('New XML file successfully created.')
+    print('New XML file successfully created.\n')
 
 
 # This function handles checking of files against potential matches and initializes the publication date once per program-run
