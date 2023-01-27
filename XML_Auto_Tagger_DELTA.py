@@ -29,23 +29,25 @@ county_filenames = (
 # Will require the PATH, NAME of matching XML file, month, day and year
 def file_writer(old_file, new_location, old_county, file_month, file_day, file_year):
     
-    new_file_ALPHA = os.path.join(new_location, "fpn_upload_" + county_codes[old_county] + "." + file_year + file_month + file_day + ".xml")
+    # Open new file, which will only contain layout notice object
+    solo_xml_file = os.path.join(new_location, "fpn_upload_" + county_codes[old_county] + "." + file_year + file_month + file_day + ".xml")
 
 
     # Create new file with county code that matches name via dictionary lookup
-    new_file_object = open(new_file_ALPHA, "w")
+    new_solo_layout_xml = open(solo_xml_file, "w")
     
-    new_file_object.write("<xml>\n")
-    new_file_object.write("  <notice>\n")
-    new_file_object.write("    <subcategory_id>17</subcategory_id>\n")
-    new_file_object.write("    <date>" + file_month + "/" + file_day + "/" + file_year + "</date>\n")
-    new_file_object.write("    <text>Business Observer - " + old_county + " " + file_month + "/" + file_day + "/" + file_year + "</text>\n")
-    new_file_object.write("    <image>" + file_year + "-" + file_month + "-" + file_day + "-" + old_county + ".pdf</image>\n")
-    new_file_object.write('</notice>\n')
-    new_file_object.write("</xml>\n")
+    # Write in the notice tag
+    new_solo_layout_xml.write("<xml>\n")
+    new_solo_layout_xml.write("  <notice>\n")
+    new_solo_layout_xml.write("    <subcategory_id>17</subcategory_id>\n")
+    new_solo_layout_xml.write("    <date>" + file_month + "/" + file_day + "/" + file_year + "</date>\n")
+    new_solo_layout_xml.write("    <text>Business Observer - " + old_county + " " + file_month + "/" + file_day + "/" + file_year + "</text>\n")
+    new_solo_layout_xml.write("    <image>" + file_year + "-" + file_month + "-" + file_day + "-" + old_county + ".pdf</image>\n")
+    new_solo_layout_xml.write('</notice>\n')
+    new_solo_layout_xml.write("</xml>\n")
     
-    # old_file_object.close()
-    new_file_object.close()
+    # Close the solo layout file
+    new_solo_layout_xml.close()
     
     # Confirm to user 
     print('New XML file successfully created.')
