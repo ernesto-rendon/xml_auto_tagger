@@ -1,11 +1,14 @@
 # Ernesto Rendon
 # June 20, 2022 10:35:01 PM
 
-# Program compares all filenames in any directory & subdirectories against
-# list of potential matches. If a match hits, it renames the XML to a new,
-# appropriately named file. Then, it creates a directory in the root of the dir 
-# passed in by the user; within this new directory, a new XML file is created with 
-# the same name as the aforementioned & respective file, but the only notice object is the corresponding PDF file
+# Program compares filenames located in directories/subdirs against list of potential matches.
+# If a match is found, then the match is duplicated and manipulated into a new file.
+# This new dupe file is properly named, has its username/password fields removed, and is placed in the same dir as the original match.
+
+# At the same time, another XML file is generated in a new dir on the root of the user-provided folder.
+# This other XML file (solo layout file) has the same proper name as before, but only contains the single layout object 
+# They need to be separated in order to have the same exact name and avoid duplicate name error
+
 
 # These libraries import necessary functions
 import os
@@ -25,9 +28,9 @@ county_filenames = (
 "Longboat.xml", "East County.xml"
 )
 
-# This function will handle writing of new XML file in the new directory
-# Will require the PATH, NAME of matching XML file, month, day and year
-def file_writer(old_file, new_location, old_county, file_month, file_day, file_year):
+# This function will handle writing of new layout XML file (only containing the layout object) in the new directory, on root of user-provided directory
+# Will require the PATH, NAME of matching XML file, and user-provided month, day and year
+def layout_file_writer(new_location, old_county, file_month, file_day, file_year):
     
     # Open new file, which will only contain layout notice object
     solo_xml_file = os.path.join(new_location, "fpn_upload_" + county_codes[old_county] + "." + file_year + file_month + file_day + ".xml")
@@ -50,7 +53,43 @@ def file_writer(old_file, new_location, old_county, file_month, file_day, file_y
     new_solo_layout_xml.close()
     
     # Confirm to user 
+    print('New LAYOUT XML file successfully created.')
+
+
+# This function takes in old XML, and delivers a properly named copy, with the depricated username/password fields removed
+def file_writer(old_file, old_location, old_county, file_month, file_day, file_year):
+    
+
+    new_file_ALPHA = os.path.join(old_location, "fpn_upload_" + county_codes[old_county] + "." + file_year + file_month + file_day + ".xml")
+
+
+    # # Create new file with county code that matches name via dictionary lookup
+    new_file_object = open(new_file_ALPHA, "w")
+
+
+    # Open existing XML file in READ mode
+    old_file_object = open(old_file, "r")
+    # Priming read for first line in existing XML file
+    old_file_line = old_file_object.readline()
+
+    # While current line is NOT empty
+    while old_file_line != '':
+    
+    	# Removing username and password portion of XML files by ignoring input and not writing to new file
+    	if (old_file_line == '  <username>gulfcoast</username>\n') or (old_file_line == '  <password>legals</password>\n') or (old_file_line == '  <username>ObserverMediaGroup</username>\n'):
+    		old_file_line = old_file_object.readline()
+    		continue
+    		
+        # Copy info to NEW XML file, line by line
+        new_file_object.write(old_file_line)
+        old_file_line = old_file_object.readline()
+    
+    old_file_object.close()
+    new_file_object.close()
+    
+    # Confirm to user 
     print('New XML file successfully created.')
+
 
 # This function handles checking of files against potential matches and initializes the publication date once per program-run
 def file_checker(user_directory):
@@ -77,12 +116,10 @@ def file_checker(user_directory):
                     	os.mkdir(tag_dest_folder)
                     
                     # Function will create new XML file with ONLY the layout tag, and place it within the newly created directory
-                    file_writer(old_XML, tag_dest_folder, old_county, file_month, file_day, file_year)
-                    
-                    # Renames the matched, extant XML file (containing individual notices) to proper encoding and leaves it in place
-                    renamed_notice_XMLs = "fpn_upload_" + county_codes[old_county] + "." + file_year + file_month + file_day + ".xml"
-                    final_name = os.path.join(old_location, renamed_notice_XMLs)
-                    os.rename(old_XML, final_name)
+                    layout_file_writer(tag_dest_folder, old_county, file_month, file_day, file_year)
+
+                    # Function will create copy of old XML file, removing the deprecated username/password tags at top of file
+                    file_writer(old_XML, old_location, old_county, file_month, file_day, file_year)
   
 # If number of command line arguments is less than or greater than 2, program will quit. 
 # Only 1 user-provided CLI argument is necessary for program
