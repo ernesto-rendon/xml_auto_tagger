@@ -97,6 +97,7 @@ def file_checker(user_directory):
     file_month = str(raw_input("Please input the month of the publication (MM): "))
     file_day = str(raw_input("Please input the day of the publication (DD): "))
     file_year = str(raw_input("Please input the year of the publication (YYYY): "))
+    print()
     
     # FILE SEARCH PARADIGM #1
     # This tries to find matches for XML files that exist in all dirs and subdirs of user provided directory
